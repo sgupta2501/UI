@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row justify-content-start">
+        <div class="col md-6">
+            <h1>Create Team Form</h1>
+            <form method="POST" action="{{ url_for('home') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+			Option to create new team is disabled for now
+                </div>
+                <div class="form-group">
+                    {{ form.preteam(class="form-control",style="list-style:none") }}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class='btn btn-primary') }}
+                </div>
+            <form>
+        </div>
+    <div>
+{% endblock %}

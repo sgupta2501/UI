@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row justify-content-start">
+        <div class="col md-6">
+            <h1>Prediction Form</h1>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.batsman.label(class="form-control-label") }}
+                    {{ form.batsman(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.batsman_ns.label(class="form-control-label") }}
+                    {{ form.batsman_ns(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.bowler.label(class="form-control-label") }}
+                    {{ form.bowler(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.over.label(class="form-control-label") }}
+                    {{ form.over(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.totWick.label(class="form-control-label") }}
+                    {{ form.totWick(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.overLastWick.label(class="form-control-label") }}
+                    {{ form.overLastWick(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class='btn btn-primary') }}
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if predictions %}
+    <div class="row">
+        <h1>Predictions</h1>
+        <table class="table">
+             <thead>
+                <tr>
+                  <th scope="col">Option</th>                
+                  <th scope="col">Probability</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr> 
+                   <th scope="row">Wicket in over + 1</th> 
+                  <td>{{ predictions.plus1['ans'] }}</td> 
+                </tr> 
+                <tr> 
+                   <th scope="row">Wicket in over + 2</th> 
+                   <td>{{ predictions.plus2['ans'] }}</td> 
+                </tr> 
+                <tr>
+                  <th scope="row">Wicket in over + 3</th> 
+                  <td>{{ predictions.plus3['ans'] }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Wicket in over + 4</th> 
+                  <td>{{ predictions.plus4['ans'] }}</td>
+                </tr>
+              </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
+
