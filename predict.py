@@ -15,6 +15,7 @@ def predict_over_1(x_1, over):
     # load the model from disk
     #print("Using mutilayer perceptron")
     loaded_model = pickle.load(open(filename, 'rb'))
+    #print("x_1", x_1)
     result_prob_1_mlp = loaded_model.predict_proba(x_1)
     #print("For +4 over", result_prob_1)
 
@@ -27,6 +28,7 @@ def predict_over_2(x_2, over):
     # load the model from disk
     #print("Using mutilayer perceptron")
     loaded_model = pickle.load(open(filename, 'rb'))
+    #print("x_2", x_2)
     result_prob_2_mlp = loaded_model.predict_proba(x_2)
     #print("For +2 over", result_prob_2)    
 
@@ -38,6 +40,7 @@ def predict_over_3(x_3, over):
     # load the model from disk
     #print("Using mutilayer perceptron")
     loaded_model = pickle.load(open(filename, 'rb'))
+    #print("x_3", x_3)
     result_prob_3_mlp = loaded_model.predict_proba(x_3)
     #print("For +3 over", result_prob_3)    
 
@@ -49,6 +52,7 @@ def predict_over_4(x_4, over):
     # load the model from disk
     #print("Using mutilayer perceptron")
     loaded_model = pickle.load(open(filename, 'rb'))
+    #print("x_4", x_4)
     result_prob_4_mlp = loaded_model.predict_proba(x_4)
     #print("For +4 over", result_prob_4)
 
@@ -66,7 +70,7 @@ def bowler_prob_in_a_over(bowler, over):
 
         den=data_bowler[(data_bowler["bowler"]== bowler)]["Tot_Match_Played"].values
         num=data_bowler[(data_bowler["bowler"]== bowler)][str_wicket].values
-
+    #print("bowler ", bowler, "over ", over, "den", den, "num", num)
     if (den==0):
         p1=0
     else:
@@ -120,6 +124,7 @@ def Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wic
 
     if (plus==1):
         tmp=p1*p51
+        print("p1",p1,"p51",p51,"p21",p21,"p31",p31,"p41",p41,"p1*p51",tmp)
         x_1= [tmp,p21,p31, p41]
         ans=predict_over_1(np.asarray(x_1).reshape(1,4),over)
     elif (plus==2):
@@ -139,7 +144,7 @@ def Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wic
     #return a
     return ans
 
-
+'''
 bowler='R Bhatia'
 batsman='TS Mills'
 non_striker='Yuvraj Singh'
@@ -151,5 +156,5 @@ print(Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_w
 print(Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wicket,2))
 print(Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wicket,3))
 print(Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wicket,4))
-
+'''
 

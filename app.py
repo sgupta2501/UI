@@ -139,28 +139,41 @@ def stream_template(template_name, **context):
 @app.route('/predict/<team1>_<team2>', methods=['GET', 'POST'])
 def predict(team1, team2):
     def g():
-        tot_wick=0
-        sum_runs=0
-        over_Lastwick=0
         [inning, match_id]=Id_list(team1,team2)
         data=pd.read_csv("ballByballData.csv",low_memory=False)
         stream=data[(data["match_id"]== match_id)][['batting_team','bowling_team','inning', 'ball', 'over', 'batsman','non_striker','bowler','total_runs','player_dismissed']]
         stream.index = np.arange(0, len(stream) )
-        inning=1
+        old_inning=1
+        tot_wick=0
+        sum_runs=0
+        over_Lastwick=0
         last_over=0
         p1=0.0
         p2=0.0
         p3=0.0
         p4=0.0
         for index, row in stream.iterrows():
+            if (old_inning != row['inning']):
+                old_inning=row['inning']
+                tot_wick=0
+                sum_runs=0
+                over_Lastwick=0
+                last_over=0
+                p1=0.0
+                p2=0.0
+                p3=0.0
+                p4=0.0
+            #print("inning", inning, "tot_wick", tot_wick, "sum runs", sum_runs, "last_over", last_over, "over_Lastwick", over_Lastwick)
             #yield index, row['over']
             sum_runs += row['total_runs']
             if (last_over != row['over']):
+                #print("calling Myrun", "bowler", row['bowler'], "over", last_over)
                 last_over=row['over']
-                p1=Myrun(row['batsman'], row['bowler'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,1)
-                p2=Myrun(row['batsman'], row['bowler'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,2)
-                p3=Myrun(row['batsman'], row['bowler'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,3)
-                p4=Myrun(row['batsman'], row['bowler'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,4)
+                if (last_over<17):
+                    p1=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,1)
+                    p2=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,2)
+                    p3=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,3)
+                    p4=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,4)
 
             pldis=row['player_dismissed']
             if pldis is np.nan :
@@ -171,7 +184,7 @@ def predict(team1, team2):
 
             yield int(row['inning']),row['batting_team'],row['bowling_team'],int(row['over']),int(row['ball']), row['batsman'], row['non_striker'], row['bowler'], int(row['total_runs']),pldis,int(sum_runs),int(tot_wick),int(over_Lastwick),p1,p2,p3,p4
 
-            sleep(1)
+            sleep(.1)
     return Response(stream_template('predict.html', data=g()))
 
 
