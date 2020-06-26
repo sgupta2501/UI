@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row justify-content-start">
+        <div class="col md-6">
+            <h1>Select Team 2 Form</h1>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.team2.label(class="form-control-label") }}
+                    {{ form.team2(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class='btn btn-primary') }}
+                </div>
+            <form>
+        </div>
+    <div>
+{% endblock %}
