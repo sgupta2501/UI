@@ -4,6 +4,7 @@ import pandas as pd
 df=pd.read_csv("ListBatsman.csv")
 def batsman_list():
 	batsman = df['Batsman'].unique().tolist() 
+	batsman.sort()
 	return batsman
 
 if __name__ == '__main__':

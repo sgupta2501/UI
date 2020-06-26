@@ -1,0 +1,171 @@
+<!DOCTYPE html> 
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<table class="table table-bordered"> 
+<th>         <h2>Match Streaming for Teams</h2> </th>
+  <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Batting Team:</label>
+    </td>
+    <td id="team1" class="col-xs-3">
+      -
+    </td>
+    <td class="field-label col-xs-3 active">
+      <label>Bowling Team:</label>
+    </td>
+    <td id="team2" class="col-xs-3">
+      -
+    </td>
+  </tr>
+</table>
+
+<table class="table table-bordered"> 
+<th>         <h2>Ball Data</h2> </th>
+  <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Inning:</label>
+    </td>
+    <td id="inning" class="col-xs-3">
+      -
+    </td>
+    </tr>
+    <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Over No:</label>
+    </td>
+    <td id="over" class="col-xs-3">
+      -
+    </td>
+    <td class="field-label col-xs-3 active">
+      <label>Ball No:</label>
+    </td>
+    <td id="ball" class="col-xs-3">
+      -
+    </td>
+  </tr>
+  <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Batsman:</label>
+    </td>
+    <td id="batsman" class="col-xs-3">
+      -
+    </td>
+    <td class="field-label col-xs-3 active">
+      <label>Non Striker:</label>
+    </td>
+    <td id="nonstriker" class="col-xs-3">
+      -
+    </td>
+    </tr>
+    <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Bowler:</label>
+    </td>
+    <td id="bowler" class="col-xs-3">
+      -
+    </td>
+  </tr>
+</table>  
+
+<table class="table table-bordered"> 
+<th>         <h2>Outcome</h2> </th>
+  <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Runs:</label>
+    </td>
+    <td id="runs" class="col-xs-3">
+      -
+    </td>
+    <td class="field-label col-xs-3 active">
+      <label>Player Dismissed:</label>
+    </td>
+    <td id="pldis" class="col-xs-3">
+      -
+    </td>
+  </tr>
+</table>
+                 
+<table class="table table-bordered"> 
+<th>         <h2>Cumulative Outcome</h2> </th>
+  <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Total Runs:</label>
+    </td>
+    <td id="sumruns" class="col-xs-3">
+      -
+    </td>
+    </tr>
+    <tr>
+    <td class="field-label col-xs-3 active">
+      <label>Total Wickets:</label>
+    </td>
+    <td id="totwick" class="col-xs-3">
+      -
+    </td>
+    <td class="field-label col-xs-3 active">
+      <label>Over of Last Wicket:</label>
+    </td>
+    <td id="overlastwick" class="col-xs-3">
+      -
+    </td>
+  </tr>
+</table>
+
+<table class="table table-bordered"> 
+<th>         <h2>Probability of Wicket in</h2> </th>
+  <tr>
+    <td class="field-label col-xs-3 active">
+      <label>+1 Over:</label>
+    </td>
+    <td id="p1" class="col-xs-3">
+      -
+    </td>
+    <td class="field-label col-xs-3 active">
+      <label>+2 Over:</label>
+    </td>
+    <td id="p2" class="col-xs-3">
+      -
+    </td>
+    </tr>
+    <tr>
+    <td class="field-label col-xs-3 active">
+      <label>+3 Over:</label>
+    </td>
+    <td id="p3" class="col-xs-3">
+      -
+    </td>
+    <td class="field-label col-xs-3 active">
+      <label>+4 Over:</label>
+    </td>
+    <td id="p4" class="col-xs-3">
+      -
+    </td>
+  </tr>
+</table>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+    {% for inning, batting_team, bowling_team, over, ball, batsman, nonstriker,bowler,runs,pldis,sumruns,totwick,overlastwick,p1,p2,p3,p4 in data: %}
+    <script>
+        $("#inning").text("{{ inning }}")
+        $("#team1").text("{{ batting_team }}")
+        $("#team2").text("{{ bowling_team }}")
+        $("#over").text("{{ over }}")
+        $("#ball").text("{{ ball }}")
+        $("#batsman").text("{{ batsman }}")
+        $("#nonstriker").text("{{ nonstriker }}")
+        $("#bowler").text("{{ bowler }}")
+        $("#runs").text("{{ runs }}")
+        $("#pldis").text("{{ pldis }}")
+        $("#totwick").text("{{ totwick }}")
+        $("#sumruns").text("{{ sumruns }}")
+        $("#overlastwick").text("{{ overlastwick }}")
+        $("#p1").text("{{ p1 }}")
+        $("#p2").text("{{ p2 }}")
+        $("#p3").text("{{ p3 }}")
+        $("#p4").text("{{ p4 }}")
+    </script>
+    {% endfor %}
+
+

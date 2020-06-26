@@ -4,6 +4,7 @@ import pandas as pd
 df=pd.read_csv("ListBowler.csv")
 def bowler_list():
 	bowler = df['Bowler'].unique().tolist() 
+	bowler.sort()
 	return bowler
 
 if __name__ == '__main__':

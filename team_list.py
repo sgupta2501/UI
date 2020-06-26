@@ -3,7 +3,8 @@ import pandas as pd
 
 df=pd.read_csv("ListTeam.csv")
 def team_list():
-	team = df['Team'].unique().tolist() 
+	team = df['Team'].unique().tolist()
+	team.sort() 
 	return team
 
 if __name__ == '__main__':

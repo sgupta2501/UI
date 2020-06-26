@@ -135,8 +135,9 @@ def Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wic
         x_4= [tmp,p24,p34, p44]
         ans=predict_over_4(np.asarray(x_4).reshape(1,4),over)
 
-    a={'ans':ans}
-    return a
+    #a={'ans':ans}
+    #return a
+    return ans
 
 
 bowler='R Bhatia'
