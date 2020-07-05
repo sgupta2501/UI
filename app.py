@@ -3,20 +3,24 @@ import os
 import time
 from datetime import datetime
 from time import sleep
+import random
+import math
+from scipy.stats import logistic
 import pandas as pd
 import numpy as np
 from flask import Flask, render_template, redirect, url_for, request, stream_with_context, Response
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, IntegerField, SubmitField, RadioField
 from wtforms.validators import DataRequired
-
+import trainModel as tm
 # util functions
 from bowler_list import bowler_list
 from batsman_list import batsman_list
 from team_list import team_list
 from predict import Myrun
 from datastreaming import Id_list
-
+if random.random()>0.7:
+    tm.main()
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hello its me'
@@ -58,6 +62,8 @@ class SelectTeamForm(FlaskForm):
 class SelectTeam2Form(FlaskForm):
 #    team1 =SelectField('Team 1', validators=[DataRequired()])
     team2 = SelectField('Team2', validators=[DataRequired()])
+    pitch = SelectField('Pitch (5: Baller favouring)', validators=[DataRequired()])
+    weather = SelectField('Weather (5: Baller favouring)', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     
@@ -94,8 +100,16 @@ def team(preteam):
         print(form.errors)
         return redirect(url_for('team2', team1=form.team1.data))
     return render_template('team.html', form=form, preteam=preteam)
+def caly(pitch,weather):
 
-
+    y = random.random()
+    y=y*((int(pitch)+int(weather))/2)   
+    y=logistic.cdf(y)
+    if y>=0.5:
+        return 1
+    else:
+        return 0
+    
 def write_data(row):
 
     fields = ["inning","match_id","TotalWicketsTillNow","TotalRunsTillNow","OverLastWicket","LastBallNo","LastOverNo"]
@@ -118,12 +132,12 @@ def team2(team1):
     #print("preteam value")
     #print(preteam)
     form = SelectTeam2Form(request.form)
-    #form.team1.choices = [(team) for team in team_list]
-    #form.team2.choices = [(team) for team in team_list]    
+    form.pitch.choices = [1,2,3,4,5]
+    form.weather.choices = [1,2,3,4,5]
     form.team2.choices = [(team) for team in find_team_list(team1)]
     if form.is_submitted():
         print(form.errors)
-        return redirect(url_for('predict', team1=team1, team2=form.team2.data))
+        return redirect(url_for('predict', team1=team1, team2=form.team2.data, pitch=form.pitch.data, weather=form.weather.data))
     return render_template('team2.html', form=form, team1=team1)
 
 def stream_template(template_name, **context):
@@ -136,8 +150,8 @@ def stream_template(template_name, **context):
     return rv
 
 
-@app.route('/predict/<team1>_<team2>', methods=['GET', 'POST'])
-def predict(team1, team2):
+@app.route('/predict/<team1>_<team2>_<pitch>_<weather>', methods=['GET', 'POST'])
+def predict(team1, team2,pitch,weather):
     def g():
         [inning, match_id]=Id_list(team1,team2)
         data=pd.read_csv("ballByballData.csv",low_memory=False)
@@ -169,11 +183,12 @@ def predict(team1, team2):
             if (last_over != row['over']):
                 #print("calling Myrun", "bowler", row['bowler'], "over", last_over)
                 last_over=row['over']
-                if (last_over<17):
-                    p1=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,1)
-                    p2=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,2)
-                    p3=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,3)
-                    p4=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,4)
+                
+            if (last_over<17):
+                p1=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,1,[caly(pitch,weather)])
+                p2=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,2,[caly(pitch,weather)])
+                p3=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,3,[caly(pitch,weather)])
+                p4=Myrun(row['bowler'], row['batsman'], row['non_striker'], int(last_over),tot_wick,over_Lastwick,4,[caly(pitch,weather )])
 
             pldis=row['player_dismissed']
             if pldis is np.nan :
@@ -303,5 +318,5 @@ def predict(team1, team2):
 if __name__ == '__main__':
     #print(batsman_list)
     #print(bowler_list)
-    app.run(host= '127.0.0.1', port=5000, debug=True)
+    app.run(host= '127.0.0.1', port=5050, debug=False)
 

@@ -9,7 +9,7 @@ import pickle
 from sklearn.utils import resample
 
 
-def predict_over_1(x_1, over):
+def predict_over_1(x_1, over,y):
 
     filename = 'finalized_model_mlp_1.sav'        
     # load the model from disk
@@ -18,11 +18,15 @@ def predict_over_1(x_1, over):
     #print("x_1", x_1)
     result_prob_1_mlp = loaded_model.predict_proba(x_1)
     #print("For +4 over", result_prob_1)
-
+   # y=[1]
+ #   loaded_model = loaded_model.fit_one(x_1, y) 
+    loaded_model = loaded_model.partial_fit(x_1, y)
+    pickle.dump(loaded_model, open(filename, 'wb'))
+    
     return round(result_prob_1_mlp[0][1],2)
 
 
-def predict_over_2(x_2, over):
+def predict_over_2(x_2, over,y):
 
     filename = 'finalized_model_mlp_2.sav'        
     # load the model from disk
@@ -31,10 +35,13 @@ def predict_over_2(x_2, over):
     #print("x_2", x_2)
     result_prob_2_mlp = loaded_model.predict_proba(x_2)
     #print("For +2 over", result_prob_2)    
+    #y=[1]
+    loaded_model = loaded_model.partial_fit(x_2, y)
+    pickle.dump(loaded_model, open(filename, 'wb'))
 
     return round(result_prob_2_mlp[0][1],2)
 
-def predict_over_3(x_3, over):
+def predict_over_3(x_3, over,y):
 
     filename = 'finalized_model_mlp_3.sav'            
     # load the model from disk
@@ -43,10 +50,13 @@ def predict_over_3(x_3, over):
     #print("x_3", x_3)
     result_prob_3_mlp = loaded_model.predict_proba(x_3)
     #print("For +3 over", result_prob_3)    
+   # y=[1]
+    loaded_model = loaded_model.partial_fit(x_3, y)
+    pickle.dump(loaded_model, open(filename, 'wb'))
 
     return round(result_prob_3_mlp[0][1],2)
 
-def predict_over_4(x_4, over):
+def predict_over_4(x_4, over,y):
 
     filename = 'finalized_model_mlp_4.sav'        
     # load the model from disk
@@ -55,6 +65,10 @@ def predict_over_4(x_4, over):
     #print("x_4", x_4)
     result_prob_4_mlp = loaded_model.predict_proba(x_4)
     #print("For +4 over", result_prob_4)
+   # y=[1]
+    loaded_model = loaded_model.partial_fit(x_4
+                                            , y)
+    pickle.dump(loaded_model, open(filename, 'wb'))
 
     return round(result_prob_4_mlp[0][1],2)
 
@@ -95,7 +109,7 @@ def batsman_prob_in_a_over(batsman, over):
     #print(p)
     return p
 
-def Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wicket, plus):
+def Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wicket, plus,y):
     
     diff = over-over_last_wicket
     #cal p1
@@ -124,21 +138,21 @@ def Myrun(bowler, batsman, non_striker, over, tot_wicket_till_now, over_last_wic
 
     if (plus==1):
         tmp=p1*p51
-        print("p1",p1,"p51",p51,"p21",p21,"p31",p31,"p41",p41,"p1*p51",tmp)
+        #print("p1",p1,"p51",p51,"p21",p21,"p31",p31,"p41",p41,"p1*p51",tmp)
         x_1= [tmp,p21,p31, p41]
-        ans=predict_over_1(np.asarray(x_1).reshape(1,4),over)
+        ans=predict_over_1(np.asarray(x_1).reshape(1,4),over,y)
     elif (plus==2):
         tmp=p1*p52
         x_2= [tmp,p22,p32, p42]
-        ans=predict_over_2(np.asarray(x_2).reshape(1,4),over)
+        ans=predict_over_2(np.asarray(x_2).reshape(1,4),over,y)
     elif (plus==3):
         tmp=p1*p53
         x_3= [tmp,p23,p33, p43]
-        ans=predict_over_3(np.asarray(x_3).reshape(1,4), over)
+        ans=predict_over_3(np.asarray(x_3).reshape(1,4), over,y)
     elif (plus==4):
         tmp=p1*p54
         x_4= [tmp,p24,p34, p44]
-        ans=predict_over_4(np.asarray(x_4).reshape(1,4),over)
+        ans=predict_over_4(np.asarray(x_4).reshape(1,4),over,y)
 
     #a={'ans':ans}
     #return a
